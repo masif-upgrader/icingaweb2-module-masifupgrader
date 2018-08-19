@@ -1,15 +1,32 @@
+div#layout:not(.minimal-layout) &[data-icinga-url*="masifupgrader/pending"] {
+  background-image: url("../static/img?module_name=masifupgrader&file=packages.jpg");
+  background-size: cover;
+
+  tr {
+    background-color: rgba(255, 255, 255, 0.75);
+  }
+
+  tbody {
+    color: black;
+  }
+}
+
+label {
+  color: inherit;
+}
+
 option[value=""] {
   display: none;
 }
 
 form[name="form_pending_packages"] + table {
-  table-layout: fixed;
+  &, & + table {
+    div#layout:not(.minimal-layout):not(.poor-layout) & {
+      table-layout: fixed;
+    }
+  }
 
   & td {
     vertical-align: top;
-  }
-
-  & + table {
-    table-layout: fixed;
   }
 }
