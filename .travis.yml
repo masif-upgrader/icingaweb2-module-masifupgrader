@@ -1,0 +1,15 @@
+before_script:
+  - gem install fpm
+
+script:
+  - .travis-ci/mk-pkgs.sh
+
+deploy:
+  provider: releases
+  api_key:
+    secure: SYUNz3KiNoTffLhjVgomo7U79iRjVDMG2z8bvNazzVOt0Ki1tnYxFC1GKRbKyJsbCnQyttJnXKKaNX1nzylkVWOlQLAU13QlKzG4ShxN5THTFiRrXnVrpWUIHXeD725jKO8YmNHaSlswKeiCrF1pxBoIm/rMRwusdo1EibdWOQ8TNBkADB+M4ujRCEpyU3gekM+jIijtNWsjMDwZWfsRTCtMJqR5xKUPFq/n4erXmCJjpFQ6dk+vm80j3+l8UhMpYwpua0tN6N4MsTafofDnN4Vw4aOUWscwKSNYHIPka9ybkxVXZmTkAd6SXTIDDnqx7jIciofJlLf8mKZPQ1ILRk+1SiYnznvUUJndguYQTjjG6UrvF9WU9wvQY08thBgnKbDvGlRxH0PCMBVimN/tdKYxVuK1fvjRSbmFzz6+wqx0RiDncXCCN1GwzfxkLNgD8qFHNqDxwQjvdexDlznVtTIizsAjBYmjsDPsxB3P3iiL2ZWko7IKpD0uOEE64/ODuZqEn7ADCzPYMBseJKrWvYL5Y8c0tyyQyV50QW59IXI3gErjNHGQkoRaFcqYp6sSf+qY7yzgxM3UDi5ZTFO//tsLK3SMDFjh/dd0WPyRDs6iykD+spHetMrIqtXWsqh7ZIwH2zKVU2Y3WVc3xcm8gBIWP/uLQyvhm3cfA2qdTwk=
+  file_glob: true
+  file: icingaweb2-module-masifupgrader-*.deb
+  skip_cleanup: true
+  on:
+    tags: true
