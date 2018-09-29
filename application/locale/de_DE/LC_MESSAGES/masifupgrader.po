@@ -11,6 +11,9 @@ msgstr ""
 "Language: de_DE\n"
 "X-Generator: Poedit 2.1.1\n"
 
+msgid "(invert selection)"
+msgstr "(Auswahl umkehren)"
+
 msgid "Action"
 msgstr "Aktion"
 
