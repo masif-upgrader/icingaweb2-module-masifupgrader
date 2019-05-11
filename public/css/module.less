@@ -19,14 +19,12 @@ option[value=""] {
   display: none;
 }
 
-form[name="form_pending_packages"] + table {
-  &, & + table {
-    div#layout:not(.minimal-layout):not(.poor-layout) & {
-      table-layout: fixed;
-    }
+form[name="form_pending_packages"] table {
+  div#layout:not(.minimal-layout):not(.poor-layout) & {
+    table-layout: fixed;
   }
 
-  & td {
+  td {
     vertical-align: top;
   }
 }
