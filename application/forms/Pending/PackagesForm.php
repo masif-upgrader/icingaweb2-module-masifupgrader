@@ -3,14 +3,14 @@
 namespace Icinga\Module\Masifupgrader\Forms\Pending;
 
 use Icinga\Module\Masifupgrader\Web\DbAwareFormTrait;
-use Icinga\Module\Masifupgrader\Web\HeadlessFormTrait;
 use Icinga\Web\Form;
+use Zend_Form_Element_Checkbox;
+use Zend_Form_Element_Submit;
 use Zend_View_Interface;
 
 class PackagesForm extends Form
 {
     use DbAwareFormTrait;
-    use HeadlessFormTrait;
 
     /**
      * @var array
@@ -157,7 +157,7 @@ EOQ
             foreach ($actions as $action => $toVersions) {
                 foreach ($toVersions as $toVersion => $_) {
                     $checkboxName = implode('_', [bin2hex($package), $action, bin2hex($toVersion)]);
-                    $this->addHeadlessElement('checkbox', $checkboxName, []);
+                    $this->addElement('checkbox', $checkboxName, []);
 
                     if (isset($formData[$checkboxName]) && $formData[$checkboxName]) {
                         $agentFilter[$package][$action][$toVersion] = null;
@@ -171,15 +171,25 @@ EOQ
             $this->addElement('hidden', 'filter_agents', ['value' => '1']);
 
             foreach ($this->getAgents($agentFilter) as $agent => $packages) {
-                $this->addHeadlessElement('checkbox', 'agent_' . bin2hex($agent), []);
+                $this->addElement('checkbox', 'agent_' . bin2hex($agent), []);
             }
         } else {
-            $this->addHeadlessElement('checkbox', 'filter_agents_first', []);
+            $this->addElement('checkbox', 'filter_agents_first', []);
         }
     }
 
     public function render(Zend_View_Interface $view = null)
     {
+        $this->create();
+
+        foreach ($this->getElements() as $element) {
+            if ($element instanceof Zend_Form_Element_Checkbox || $element instanceof Zend_Form_Element_Submit) {
+                $element->setDecorators([
+                    'Zend_Form_Decorator_ViewHelper' => $element->getDecorators()['Zend_Form_Decorator_ViewHelper']
+                ]);
+            }
+        }
+
         if ($view === null) {
             $view = $this->getView();
         }
@@ -190,7 +200,16 @@ EOQ
         $invertTrigger = $this->translate('(invert selection)');
         $t1checkbox1 = $this->translate('Select specific agents first');
 
-        $result = $this->renderHeadless($view)
+        $filterAgents = $this->getElement('filter_agents');
+        if ($filterAgents !== null) {
+            $filterAgents = $filterAgents->render($view);
+        }
+
+        $result = "<form id='{$this->getName()}' name='{$this->getName()}' enctype='{$this->getEncType()}' "
+            . "method='{$this->getMethod()}' action='{$this->getAction()}'>"
+            . $this->getElement($this->getUidElementName())->render($view)
+            . $this->getElement($this->getTokenElementName())->render($view)
+            . $filterAgents
             . "<table class='common-table invertable-checkboxes'><thead><tr><th colspan='3'>{$view->escape($t1header1)}</th>"
             . "<th>{$view->escape($t1header2)}</th>"
             . "<th colspan='3'>{$view->escape($t1header3)} <a href='#' class='invertable-checkboxes-trigger'>{$view->escape($invertTrigger)}</a></th></tr></thead><tbody>";
@@ -251,7 +270,7 @@ EOQ
             $result .= '<tr>' . implode('', $row) . '</tr>';
         }
 
-        if ($this->getElement('filter_agents') === null) {
+        if ($filterAgents === null) {
             $filterAgents = $this->getElement('filter_agents_first');
 
             $result .= "<tr><td rowspan='2' colspan='4'></td><td colspan='3'>{$filterAgents->render($view)}"
@@ -269,7 +288,7 @@ EOQ
             $result .= "<tr><td colspan='2'>{$this->getElement('btn_submit')->render($view)}</td></tr></tbody></table>";
         }
 
-        return $result;
+        return "$result</form>";
     }
 
     public function onSuccess()
@@ -297,7 +316,7 @@ EOQ
         foreach ($this->getTasks() as $package => list($agents, $actions)) {
             foreach ($actions as $action => $toVersions) {
                 foreach ($toVersions as $toVersion => $_) {
-                    /** @var \Zend_Form_Element_Checkbox $checkbox */
+                    /** @var Zend_Form_Element_Checkbox $checkbox */
                     $checkbox = $this->getElement(implode('_', [bin2hex($package), $action, bin2hex($toVersion)]));
 
                     if ($checkbox->isChecked()) {
