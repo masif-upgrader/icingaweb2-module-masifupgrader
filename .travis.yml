@@ -1,8 +1,10 @@
-before_script:
-  - gem install fpm
+language: minimal
+
+services:
+  - docker
 
 script:
-  - .travis-ci/mk-pkgs.sh
+  - 'docker run --rm -v "$(pwd):/src" masifupgrader/package-factory'
 
 deploy:
   provider: releases
