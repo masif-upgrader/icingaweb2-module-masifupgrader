@@ -202,7 +202,7 @@ EOQ
 
         $filterAgents = $this->getElement('filter_agents');
         if ($filterAgents !== null) {
-            $filterAgents = $filterAgents->render($view);
+            $filterAgents = $filterAgents->setValue('1')->render($view);
         }
 
         $result = "<form id='{$this->getName()}' name='{$this->getName()}' enctype='{$this->getEncType()}' "
@@ -303,7 +303,19 @@ EOQ
             $agentFilter = '';
             $params = [];
         } else {
-            $params = array_keys($this->getAgents());
+            $agents = [];
+
+            foreach ($this->getElements() as $element) {
+                $matches = [];
+
+                if ($element instanceof Zend_Form_Element_Checkbox
+                    && preg_match('/\Aagent_((?:[0-9a-f]{2})+)\z/', $element->getName(), $matches)
+                    && $element->isChecked()) {
+                    $agents[hex2bin($matches[1])] = null;
+                }
+            }
+
+            $params = array_keys($agents);
             if (empty($params)) {
                 return false;
             }
