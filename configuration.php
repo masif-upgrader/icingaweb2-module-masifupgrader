@@ -16,3 +16,8 @@ $section->add(N_('Pending updates'), [
     'icon'  => 'reschedule',
     'url'   => 'masifupgrader/pending'
 ]);
+
+$section->add(N_('Reset'), [
+    'icon'  => 'rewind',
+    'url'   => 'masifupgrader/reset'
+]);
