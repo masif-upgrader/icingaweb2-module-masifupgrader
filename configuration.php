@@ -8,6 +8,12 @@ $this->provideConfigTab('backend', [
     'title' => $this->translate('Database backend')
 ]);
 
+$this->provideConfigTab('integration', [
+    'url'   => 'config/integration',
+    'label' => $this->translate('Integration'),
+    'title' => $this->translate('Monitoring integration')
+]);
+
 $section = $this->menuSection(N_('Masif Upgrader'), [
     'icon'  => 'reschedule'
 ]);
