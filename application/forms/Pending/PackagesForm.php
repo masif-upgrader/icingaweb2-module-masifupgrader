@@ -109,7 +109,7 @@ EOQ
             foreach ($actions as $action => $toVersions) {
                 foreach ($toVersions as $toVersion => $_) {
                     $checkboxName = implode('_', [bin2hex($package), $action, bin2hex($toVersion)]);
-                    $this->addElement('checkbox', $checkboxName, []);
+                    $this->addElement(new Zend_Form_Element_Checkbox($checkboxName));
 
                     if (isset($formData[$checkboxName]) && $formData[$checkboxName]) {
                         $agentFilter[$package][$action][$toVersion] = null;
@@ -123,10 +123,10 @@ EOQ
             $this->addElement('hidden', 'filter_agents', ['value' => '1']);
 
             foreach ($this->getAgents($agentFilter) as $agent => $packages) {
-                $this->addElement('checkbox', 'agent_' . bin2hex($agent), []);
+                $this->addElement(new Zend_Form_Element_Checkbox('agent_' . bin2hex($agent)));
             }
         } else {
-            $this->addElement('checkbox', 'filter_agents_first', []);
+            $this->addElement(new Zend_Form_Element_Checkbox('filter_agents_first'));
         }
     }
 

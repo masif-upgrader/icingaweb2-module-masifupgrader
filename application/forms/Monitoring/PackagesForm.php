@@ -65,7 +65,7 @@ EOQ
             foreach ($actions as $action => $toVersions) {
                 foreach ($toVersions as $toVersion => $_) {
                     $checkboxName = implode('_', [bin2hex($package), $action, bin2hex($toVersion)]);
-                    $this->addElement('checkbox', $checkboxName, []);
+                    $this->addElement(new Zend_Form_Element_Checkbox($checkboxName));
                 }
             }
         }
