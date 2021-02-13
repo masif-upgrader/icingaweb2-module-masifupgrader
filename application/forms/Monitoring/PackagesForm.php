@@ -129,16 +129,12 @@ EOQ
                 krsort($toVersions, SORT_NATURAL);
 
                 foreach ($toVersions as $toVersion => $_) {
-                    if ($toVersion === '') {
-                        $toVersion = $this->translate('N/A');
-                    }
-
                     $approve = $this->getElement(implode('_', [bin2hex($package), $action, bin2hex($toVersion)]));
 
                     $rows[] = [
                         null,
                         null,
-                        "<td colspan='2' class='invertable-checkbox'>{$approve->render($view)}<label for='{$view->escape($approve->getId())}'>&emsp;{$view->escape($toVersion)}</label></td>"
+                        "<td colspan='2' class='invertable-checkbox'>{$approve->render($view)}<label for='{$view->escape($approve->getId())}'>&emsp;{$view->escape($toVersion === '' ? $this->translate('N/A') : $toVersion)}</label></td>"
                     ];
 
                     ++$currentRow;
